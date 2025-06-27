@@ -154,10 +154,9 @@ export default function EditToken({ token, disabled }: EditTokenProps) {
     try {
       const tokenData: UpdateTokenDto = {
         ...values,
-        totalSupply: values.totalSupply
-          ? parseFloat(values.totalSupply)
-          : undefined,
-        priceUsd: values.priceUsd ? parseFloat(values.priceUsd) : undefined,
+        totalSupply: values.totalSupply ? parseFloat(values.totalSupply) : 0,
+        priceUsd: values.priceUsd ? parseFloat(values.priceUsd) : 0,
+        website: values.website || "",
       };
 
       await updateTokenMutation.mutateAsync({ id: token.id, data: tokenData });

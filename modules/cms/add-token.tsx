@@ -126,10 +126,9 @@ export default function AddToken() {
     try {
       const tokenData: CreateTokenDto = {
         ...values,
-        totalSupply: values.totalSupply
-          ? parseFloat(values.totalSupply)
-          : undefined,
-        priceUsd: values.priceUsd ? parseFloat(values.priceUsd) : undefined,
+        totalSupply: values.totalSupply ? parseFloat(values.totalSupply) : 0,
+        priceUsd: values.priceUsd ? parseFloat(values.priceUsd) : 0,
+        website: values.website || "",
       };
 
       await createTokenMutation.mutateAsync(tokenData);

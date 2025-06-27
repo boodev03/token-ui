@@ -58,7 +58,7 @@ export default function TokenManagement() {
 
   return (
     <div className="container mx-auto p-6 h-screen flex flex-col">
-      <Card className="flex-1 flex flex-col">
+      <Card className="flex-1 flex flex-col border-none">
         <CardHeader>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>

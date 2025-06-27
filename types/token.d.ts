@@ -3,9 +3,9 @@ export interface Token {
     logo?: string;
     name: string;
     symbol: string;
-    totalSupply?: number;
-    priceUsd?: number;
-    description?: string;
+    totalSupply: number;
+    priceUsd: number;
+    description: string;
     website?: string;
     createdAt: string;
     updatedAt: string;
@@ -15,9 +15,9 @@ export interface CreateTokenDto {
     logo?: string;
     name: string;
     symbol: string;
-    totalSupply?: number;
-    priceUsd?: number;
-    description?: string;
+    totalSupply: number;
+    priceUsd: number;
+    description: string;
     website?: string;
 }
 

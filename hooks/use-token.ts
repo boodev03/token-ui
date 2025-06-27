@@ -17,7 +17,6 @@ import {
     UpdateTokenDto
 } from '../types/token';
 
-// Error type for better type safety
 interface ApiError {
     response?: {
         data?: {
@@ -37,7 +36,6 @@ export const tokenKeys = {
     detail: (id: string) => [...tokenKeys.details(), id] as const,
 };
 
-// Hook to get all tokens with infinite scroll
 export const useTokens = (
     params?: Omit<TokenQueryParams, 'page'>,
 ) => {
@@ -56,7 +54,6 @@ export const useTokens = (
     });
 };
 
-// Hook to get token by ID
 export const useToken = (
     id: string,
     options?: UseQueryOptions<ApiResponse<Token>, ApiError>
@@ -70,7 +67,6 @@ export const useToken = (
     });
 };
 
-// Hook to create token
 export const useCreateToken = (
     options?: UseMutationOptions<ApiResponse<Token>, ApiError, CreateTokenDto>
 ) => {
@@ -97,7 +93,6 @@ export const useCreateToken = (
     });
 };
 
-// Hook to update token
 export const useUpdateToken = (
     options?: UseMutationOptions<ApiResponse<Token>, ApiError, { id: string; data: UpdateTokenDto }>
 ) => {
@@ -125,7 +120,6 @@ export const useUpdateToken = (
     });
 };
 
-// Hook to delete token
 export const useDeleteToken = (
     options?: UseMutationOptions<ApiResponse<null>, ApiError, string>
 ) => {
@@ -147,7 +141,6 @@ export const useDeleteToken = (
     });
 };
 
-// Utility function to extract error message
 export const getErrorMessage = (error: ApiError): string => {
     return error.response?.data?.error ||
         error.response?.data?.message ||
@@ -155,14 +148,13 @@ export const getErrorMessage = (error: ApiError): string => {
         'An unknown error occurred';
 };
 
-// Hook for paginated tokens with 10 items per page
 export const usePaginatedTokens = (
     params?: Omit<TokenQueryParams, 'limit'>,
     options?: UseQueryOptions<ApiResponse<Token[]>, ApiError>
 ) => {
     const queryParams = {
         ...params,
-        limit: 10, // Fixed at 10 items per page
+        limit: 10,
     };
 
     return useQuery({

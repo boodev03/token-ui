@@ -44,7 +44,6 @@ export default function TokenDetailModal({
   // Mock price change for demo (in real app, this would come from API)
   const priceChange = token ? (Math.random() - 0.5) * 20 : 0;
 
-  // Format price with proper decimal places
   const formatPrice = (price?: number) => {
     if (!price) return "N/A";
     if (price < 0.01) return `$${price.toFixed(8)}`;
@@ -55,7 +54,6 @@ export default function TokenDetailModal({
     })}`;
   };
 
-  // Format supply with proper abbreviations
   const formatSupply = (supply?: number) => {
     if (!supply) return "N/A";
     if (supply >= 1e12) return `${(supply / 1e12).toFixed(2)}T`;
@@ -65,7 +63,6 @@ export default function TokenDetailModal({
     return supply.toLocaleString();
   };
 
-  // Format date
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -76,7 +73,6 @@ export default function TokenDetailModal({
     });
   };
 
-  // Copy to clipboard function
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopied(true);

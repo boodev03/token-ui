@@ -36,10 +36,8 @@ export default function TokenList({
   const [selectedTokenId, setSelectedTokenId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Debounce search query to avoid excessive API calls
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
-  // Ref for infinite scroll observer
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const {
@@ -56,7 +54,6 @@ export default function TokenList({
     limit: limit || 12,
   });
 
-  // Intersection Observer for infinite scroll
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const [target] = entries;
@@ -83,7 +80,6 @@ export default function TokenList({
     };
   }, [handleObserver]);
 
-  // Handle token detail modal
   const handleTokenClick = (tokenId: string) => {
     setSelectedTokenId(tokenId);
     setIsModalOpen(true);
@@ -94,13 +90,11 @@ export default function TokenList({
     setSelectedTokenId(null);
   };
 
-  // Flatten all pages data
   const tokens = useMemo(() => {
     if (!tokensData?.pages) return [];
     return tokensData.pages.flatMap((page) => page.data || []);
   }, [tokensData]);
 
-  // Format price with proper decimal places
   const formatPrice = (price?: number) => {
     if (!price) return "N/A";
     if (price < 0.01) return `$${price.toFixed(8)}`;
@@ -111,7 +105,6 @@ export default function TokenList({
     })}`;
   };
 
-  // Format supply with proper abbreviations
   const formatSupply = (supply?: number) => {
     if (!supply) return "N/A";
     if (supply >= 1e12) return `${(supply / 1e12).toFixed(1)}T`;
@@ -124,7 +117,6 @@ export default function TokenList({
   if (isLoading) {
     return (
       <div className="space-y-6">
-        {/* Header with Search and Filters */}
         {searchable && (
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             <div className="relative flex-1 max-w-md">
@@ -152,7 +144,6 @@ export default function TokenList({
           </div>
         )}
 
-        {/* Loading Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {Array.from({ length: limit || 12 }).map((_, index) => (
             <TokenItemLoading key={index} />
@@ -179,7 +170,6 @@ export default function TokenList({
 
   return (
     <div className="space-y-6">
-      {/* Header with Search and Filters */}
       {searchable && (
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div className="relative flex-1 max-w-md">
@@ -221,7 +211,6 @@ export default function TokenList({
         </div>
       )}
 
-      {/* Tokens Grid */}
       {tokens.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-500">No tokens found.</p>
@@ -241,7 +230,6 @@ export default function TokenList({
             ))}
           </div>
 
-          {/* Infinite Scroll Trigger */}
           {hasNextPage && (
             <div
               ref={loadMoreRef}
@@ -256,7 +244,6 @@ export default function TokenList({
             </div>
           )}
 
-          {/* End of results indicator */}
           {!hasNextPage && tokens.length > 0 && (
             <div className="text-center py-8">
               <p className="text-gray-500 text-sm">
@@ -267,7 +254,6 @@ export default function TokenList({
         </>
       )}
 
-      {/* Token Detail Modal */}
       <TokenDetailModal
         tokenId={selectedTokenId}
         isOpen={isModalOpen}
