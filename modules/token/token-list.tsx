@@ -17,17 +17,7 @@ import TokenDetailModal from "./token-detail-modal";
 import TokenItem from "./token-item";
 import TokenItemLoading from "./token-item-loading";
 
-interface TokenListProps {
-  searchable?: boolean;
-  limit?: number;
-  showPriceChange?: boolean;
-}
-
-export default function TokenList({
-  searchable = true,
-  limit,
-  showPriceChange = true,
-}: TokenListProps) {
+export default function TokenList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"name" | "priceUsd" | "createdAt">(
     "createdAt"
@@ -51,7 +41,7 @@ export default function TokenList({
     search: debouncedSearchQuery || undefined,
     sort_by: sortBy,
     sort_order: sortOrder,
-    limit: limit || 12,
+    limit: 12,
   });
 
   const handleObserver = useCallback(
@@ -114,45 +104,6 @@ export default function TokenList({
     return supply.toLocaleString();
   };
 
-  if (isLoading) {
-    return (
-      <div className="space-y-6">
-        {searchable && (
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search tokens by name or symbol..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-                disabled
-              />
-            </div>
-
-            <div className="flex gap-2">
-              <Select disabled>
-                <SelectTrigger className="w-[120px]">
-                  <SelectValue placeholder="Latest" />
-                </SelectTrigger>
-              </Select>
-
-              <Button variant="outline" size="sm" className="h-9" disabled>
-                ↓
-              </Button>
-            </div>
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {Array.from({ length: limit || 12 }).map((_, index) => (
-            <TokenItemLoading key={index} />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="text-center py-12">
@@ -170,48 +121,54 @@ export default function TokenList({
 
   return (
     <div className="space-y-6">
-      {searchable && (
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Search tokens by name or symbol..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input
+            placeholder="Search tokens by name or symbol..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
+        </div>
 
-          <div className="flex gap-2">
-            <Select
-              value={sortBy}
-              onValueChange={(value) =>
-                setSortBy(value as "name" | "priceUsd" | "createdAt")
-              }
-            >
-              <SelectTrigger className="w-[120px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="createdAt">Latest</SelectItem>
-                <SelectItem value="name">Name</SelectItem>
-                <SelectItem value="priceUsd">Price</SelectItem>
-              </SelectContent>
-            </Select>
+        <div className="flex gap-2">
+          <Select
+            value={sortBy}
+            onValueChange={(value) =>
+              setSortBy(value as "name" | "priceUsd" | "createdAt")
+            }
+          >
+            <SelectTrigger className="w-[120px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="createdAt">Latest</SelectItem>
+              <SelectItem value="name">Name</SelectItem>
+              <SelectItem value="priceUsd">Price</SelectItem>
+            </SelectContent>
+          </Select>
 
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-              className="h-9"
-            >
-              {sortOrder === "asc" ? "↑" : "↓"}
-            </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+            className="h-9"
+          >
+            {sortOrder === "asc" ? "↑" : "↓"}
+          </Button>
+        </div>
+      </div>
+
+      {isLoading ? (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 12 }).map((_, index) => (
+              <TokenItemLoading key={index} />
+            ))}
           </div>
         </div>
-      )}
-
-      {tokens.length === 0 ? (
+      ) : tokens.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-500">No tokens found.</p>
         </div>
@@ -222,7 +179,7 @@ export default function TokenList({
               <TokenItem
                 key={token.id}
                 token={token}
-                showPriceChange={showPriceChange}
+                showPriceChange={true}
                 formatPrice={formatPrice}
                 formatSupply={formatSupply}
                 onTokenClick={handleTokenClick}
